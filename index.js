@@ -1,26 +1,50 @@
 'use strict';
 
 var handlebars = require('handlebars'),
+  _ = require('lodash'),
   fs = require('fs'),
-  helpers = require('handlebars-helpers').register(handlebars, {}),
-  chalk = require('chalk')
+ // helpers = require('handlebars-helpers')(handlebars),
+  chalk = require('chalk'),
+  Load = require('./load')
 
-function Template (path) {
-  if (!path) {
+var path = null,
+  layouts=[],
+  partials = null
+
+function Template (_path) {
+  if (!_path) {
     throw new Error('a path must be provided')
   }
 
-  try{
-    fs.lstatSync(path).isDirectory()
-    this.path = path
-  } catch (error) {
-    throw new Error ('directory does not exists')
-  }
-
-  // this.layouts = layouts
-  // this.pages = pages
-  // this.partial = partials
+  path = _path
 }
+
+Template.prototype.load = function(callback) {
+  var self = this
+
+  var tpl = new Load(path, function (err, data){
+    if(err){
+      throw new Error(err)
+      callback(err)
+    }
+
+    _.each(data.partials, function (partial){
+      self.registerPartial(partial.name, partial.content)
+    })
+
+    _.each(data.layouts, function (layout){
+      self.compile(layout.content, function (err, tpl){
+        var lyt = {
+          name: layout.name,
+          template: tpl
+        }
+
+        layouts.push(lyt)
+      })
+    })
+    callback(null)
+  })
+};
 
 Template.prototype.compile = function(template, callback) {
   var tpl
@@ -34,16 +58,16 @@ Template.prototype.compile = function(template, callback) {
   callback(null, tpl)
 }
 
-Template.prototype.render = function(template, data, callback) {
-  var output
+Template.prototype.render = function(data, callback) {
+  var layout = _.find(layouts, {'name': data.layout})
+
+  this.registerPartial('body', handlebars.partials[data.page])
 
   try {
-    output = template(data)
+    callback(null, layout.template(data.content))
   } catch (ex){
     callback(ex, null)
   }
-
-  callback(null, output)
 }
 
 Template.prototype.registerPartial = function(name, content) {

@@ -26,7 +26,7 @@ describe('Load', function (){
 
     it('should succeed if path exists', function (){
       var good = function (){
-        return new Load('./templates')
+        return new Load('test/templates')
       }
 
       expect(good).to.be.ok

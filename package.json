@@ -24,7 +24,8 @@
     "handlebars": "^2.0.0-alpha.4",
     "handlebars-helpers": "^0.5.5",
     "grunt": "^0.4.5",
-    "node-dir": "^0.1.5"
+    "node-dir": "^0.1.5",
+    "lodash": "^2.4.1"
   },
   "devDependencies": {
     "mocha": "^1.19.0",

@@ -1,9 +1,13 @@
 'use strict';
 
 var dir = require('node-dir'),
-  fs = require('fs')
+  fs = require('fs'),
+  files = {
+    layouts:[],
+    partials:[]
+  }
 
-function Load (path) {
+function Load (path, callback) {
   if (!path) {
     throw new Error('a path must be provided')
   }
@@ -15,40 +19,61 @@ function Load (path) {
     throw new Error ('directory does not exists')
   }
 
-  this.result = []
+  this.read(function (err, data){
+    callback(err, data)
+  })
 }
 
 Load.prototype.append = function(filename, content) {
-  var reg = /^[A-Za-z-_0-9]*/
+  // test for:  (layouts)/(default)(.hbs)
+  var reg = /([\w]*)\/([\w]*)(\.hbs$)/
+  var result = reg.exec(filename)
 
-  var partial = {
-    name: reg.exec(filename)[0],
-    content: content
+  if(result){
+    var file = {
+      name: result[2],
+      content: content
+    }
+
+    if(result[1] === 'layouts'){
+      files.layouts.push(file)
+    } else {
+      files.partials.push(file)
+    }
+
+  } else {
+    throw new Error('path not valid')
   }
-
-  this.result.push(partial)
 };
 
+/*
+  return loaded files
+*/
+Load.prototype.getFiles = function() {
+  return files
+};
+
+/*
+  read all files in this.path
+*/
 Load.prototype.read = function(callback) {
   var self = this
+
   dir.readFiles(self.path,
-    {
-      shortName: true
-    },
     function(err, content, file, next) {
       if (err){
-        return callback(err, null)
+        return callback(err)
       }
-
       self.append(file, content)
-      next();
+      next(null);
     },
-    function(err, files){
+    function(err){
       if (err) {
         return callback(err, null)
       }
 
-      callback(null, self.result)
+      // return the loaded files
+      callback(null, self.getFiles())
     }
   )
 };
