@@ -28,10 +28,12 @@ Template.prototype.load = function(callback) {
       callback(err)
     }
 
+    // register all the partials in dir
     _.each(data.partials, function (partial){
       self.registerPartial(partial.name, partial.content)
     })
 
+    // compile all layouts
     _.each(data.layouts, function (layout){
       self.compile(layout.content, function (err, tpl){
         var lyt = {
@@ -59,9 +61,16 @@ Template.prototype.compile = function(template, callback) {
 }
 
 Template.prototype.render = function(data, callback) {
-  var layout = _.find(layouts, {'name': data.layout})
+  // load the specified layout or the default
+  var layout = _.find(layouts, {'name': data.layout}) || _.find(layouts, {'name': 'default'})
+  if(!layout){
+    throw new Error('layout not found')
+  }
 
-  this.registerPartial('body', handlebars.partials[data.page])
+  // load as body the partial specified
+  var body = handlebars.partials[data.page] || handlebars.partials['main']
+
+  this.registerPartial('body', body)
 
   try {
     callback(null, layout.template(data.content))
