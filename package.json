@@ -1,0 +1,33 @@
+{
+  "name": "cartapacio.core.template",
+  "version": "0.0.1",
+  "description": "compile and render handlebars templates",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -R spec test/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cartapacio/cartapacio.core.template.git"
+  },
+  "keywords": [
+    "handlebars"
+  ],
+  "author": "Gabriel Zea <zea@gbrl.in> (http://gbrl.in/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cartapacio/cartapacio.core.template/issues"
+  },
+  "homepage": "https://github.com/cartapacio/cartapacio.core.template",
+  "dependencies": {
+    "chalk": "^0.4.0",
+    "handlebars": "^2.0.0-alpha.4",
+    "handlebars-helpers": "^0.5.5",
+    "grunt": "^0.4.5",
+    "node-dir": "^0.1.5"
+  },
+  "devDependencies": {
+    "mocha": "^1.19.0",
+    "chai": "^1.9.1"
+  }
+}
