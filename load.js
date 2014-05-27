@@ -26,7 +26,7 @@ function Load (path, callback) {
 
 Load.prototype.append = function(filename, content) {
   // test for:  (layouts)/(default)(.hbs)
-  var reg = /([\w]*)\/([\w]*)(\.hbs$)/
+  var reg = /([\w]*)\/([\w-_]*)(\.hbs$)/
   var result = reg.exec(filename)
 
   if(result){
@@ -42,7 +42,7 @@ Load.prototype.append = function(filename, content) {
     }
 
   } else {
-    throw new Error('path not valid')
+    throw new Error('regex failed')
   }
 };
 
