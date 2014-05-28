@@ -2,27 +2,27 @@
 
 var handlebars = require('handlebars'),
   _ = require('lodash'),
-  fs = require('fs'),
+  path = require('path'),
  // helpers = require('handlebars-helpers')(handlebars),
   chalk = require('chalk'),
   Load = require('./load')
 
-var path = null,
+var tplPath = null,
   layouts=[],
   partials = null
 
 function Template (_path) {
   if (!_path) {
-    throw new Error('a path must be provided')
+    throw new Error('a tplPath must be provided')
   }
 
-  path = _path
+  tplPath =  path.join(_path, 'src', 'templates')
 }
 
 Template.prototype.load = function(callback) {
   var self = this
 
-  var tpl = new Load(path, function (err, data){
+  var tpl = new Load(tplPath, function (err, data){
     if(err){
       throw new Error(err)
       callback(err)
@@ -73,7 +73,7 @@ Template.prototype.render = function(data, callback) {
   this.registerPartial('body', body)
 
   try {
-    callback(null, layout.template(data.content))
+    callback(null, layout.template({document: data.document, assets: data.assets}))
   } catch (ex){
     callback(ex, null)
   }
