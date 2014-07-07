@@ -60,6 +60,7 @@ Load.prototype.read = function(callback) {
   var self = this
 
   dir.readFiles(self.path,
+    {exclude: /^\./},
     function(err, content, file, next) {
       if (err){
         return callback(err)

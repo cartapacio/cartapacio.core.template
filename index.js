@@ -3,13 +3,14 @@
 var handlebars = require('handlebars'),
   _ = require('lodash'),
   path = require('path'),
- // helpers = require('handlebars-helpers')(handlebars),
   chalk = require('chalk'),
   Load = require('./load')
 
 var tplPath = null,
   layouts=[],
   partials = null
+
+require('handlebars-helpers').register(handlebars, {})
 
 function Template (_path) {
   if (!_path) {
