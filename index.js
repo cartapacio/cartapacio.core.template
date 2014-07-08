@@ -10,7 +10,9 @@ var tplPath = null,
   layouts=[],
   partials = null
 
+// register helpers
 require('handlebars-helpers').register(handlebars, {})
+require('handlebars-layouts')(handlebars)
 
 function Template (_path) {
   if (!_path) {
