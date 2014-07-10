@@ -1,6 +1,7 @@
 'use strict';
 
 var handlebars = require('handlebars'),
+  slug = require('slug'),
   _ = require('lodash'),
   path = require('path'),
   chalk = require('chalk'),
@@ -20,6 +21,13 @@ function Template (_path) {
   }
 
   tplPath =  path.join(_path, 'src', 'templates')
+
+  // register custom handlebars helpers
+
+  // trim and return an slugified version of the given text
+  handlebars.registerHelper('slugify', function (text){
+    return slug(text.trim())
+  })
 }
 
 Template.prototype.load = function(callback) {

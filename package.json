@@ -1,6 +1,6 @@
 {
   "name": "cartapacio.core.template",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "compile and render handlebars templates",
   "main": "index.js",
   "scripts": {
@@ -26,7 +26,8 @@
     "grunt": "^0.4.5",
     "node-dir": "^0.1.5",
     "lodash": "^2.4.1",
-    "handlebars-layouts": "^0.3.3"
+    "handlebars-layouts": "^0.3.3",
+    "slug": "^0.5.0"
   },
   "devDependencies": {
     "mocha": "^1.19.0",
