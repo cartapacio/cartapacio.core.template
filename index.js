@@ -26,7 +26,19 @@ function Template (_path) {
 
   // trim and return an slugified version of the given text
   handlebars.registerHelper('slugify', function (text){
+    if (text === null){
+      return ''
+    }
     return slug(text.trim())
+  })
+
+  // clean html markup
+  // stolen from underscore.string
+  handlebars.registerHelper('plainify', function (text){
+    if (text === null){
+      return ''
+    }
+    return String(text).replace(/<\/?[^>]+>/g, '');
   })
 }
 
