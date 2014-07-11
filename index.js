@@ -29,7 +29,7 @@ function Template (_path) {
     if (text === null){
       return ''
     }
-    return slug(text.trim())
+    return slug(String(text).trim())
   })
 
   // clean html markup
@@ -40,6 +40,41 @@ function Template (_path) {
     }
     return String(text).replace(/<\/?[^>]+>/g, '');
   })
+
+  // remove some hidden chars
+  handlebars.registerHelper('cleanify', function (text){
+    if (text === null){
+      return ''
+    }
+    return String(text).replace(/(\r\n|\n|\r|\t)/gm,'');
+  })
+
+  // chain helper
+  // https://github.com/wycats/handlebars.js/issues/304#issuecomment-15635762
+  handlebars.registerHelper('chain', function() {
+    var helpers = [];
+    var args = Array.prototype.slice.call(arguments);
+    var argsLength = args.length;
+    var index;
+    var arg;
+
+    for (index = 0, arg = args[index];
+         index < argsLength;
+         arg = args[++index]) {
+      if (handlebars.helpers[arg]) {
+        helpers.push(handlebars.helpers[arg]);
+      } else {
+        args = args.slice(index);
+        break;
+      }
+    }
+
+    while (helpers.length) {
+      args = [helpers.pop().apply(handlebars.helpers, args)];
+    }
+
+    return args.shift();
+  });
 }
 
 Template.prototype.load = function(callback) {
