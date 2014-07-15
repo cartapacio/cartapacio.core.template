@@ -1,6 +1,6 @@
 {
   "name": "cartapacio.core.template",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "compile and render handlebars templates",
   "main": "index.js",
   "scripts": {

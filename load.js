@@ -26,7 +26,14 @@ function Load (path, callback) {
 
 Load.prototype.append = function(filename, content) {
   // test for:  (layouts)/(default)(.hbs)
-  var reg = /([\w]*)\/([\w-_]*)(\.hbs$)/
+  var reg = null
+
+  if(process.platform === 'win32'){
+    reg = /([\w]*)\\([\w-_]*)(\.hbs$)/
+  } else {
+    reg = /([\w]*)\/([\w-_]*)(\.hbs$)/
+  }
+
   var result = reg.exec(filename)
 
   if(result){
